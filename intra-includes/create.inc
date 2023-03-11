@@ -19,7 +19,7 @@
     <legend>Obecné údaje</legend>
     <ol id="general-freeform-fields">
       <li>
-        <label class="required" for="type">Typ požadovaného dokumentu:</label>
+        <label class="required" for="type">Typ požadovaného dokumentu</label>
         <select name="type" id="type">
           <option value=""/>
           [% IF whole.value.other.type.lower == "book" %]
@@ -77,7 +77,7 @@
     <ol>
       <li>
         <label class="required" for="cardnumber">
-          Číslo průkazu, uživatelské jméno nebo příjmení:
+          Číslo průkazu, uživatelské jméno nebo příjmení
         </label>
         <input type="text" name="cardnumber" id="cardnumber" autocomplete="off"
                type="text" value="" />
