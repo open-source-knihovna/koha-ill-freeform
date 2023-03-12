@@ -4,8 +4,7 @@
 
 [% IF whole.stage == "confirm" %]
 <h2>Potvrzení ručního MVS požadavku</h2>
-<p>Potvrzením změníte stav požadavku na 'Potvrzeno'.</p>
-<p>To znamená, že jste konkrétní knihovně požadavek na MVS již odeslali.</p>
+<p>Dožádaná knihovna již MVS požadavek obdržela a přislíbila dokument poskytnout.</p>
 <p>Můžete-li potvrdit, že se tak stalo, klikněte prosím na tlačítko 'Potvrdit požadavek'.</p>
 <p>
   [% base_url = "/cgi-bin/koha/ill/ill-requests.pl" %]
