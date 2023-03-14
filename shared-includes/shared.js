@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     );
     $('#type').change(function() {
-        $('#freeform_create_form').prepend(
+        $('#create_form').prepend(
             '<input type="hidden" name="change_type" value="1" />'
         );
-        $('#freeform_create_form').submit();
+        $('#create_form').submit();
     });
     $('#freeform-fields').on('keyup', '.custom-name', function() {
         var val = $(this).val();
-        if (core.indexOf(val) > -1) {
+        if (core.indexOf(val.toLowerCase()) > -1) {
             $('#custom-warning').text(_('The name "' + val + '" is not permitted')).show();
             $('#ill-submit').attr('disabled', true);
             $('#add-new-fields').attr('disabled', true);

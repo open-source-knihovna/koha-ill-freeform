@@ -114,6 +114,9 @@ sub capabilities {
 
         # Return whether we are ready to display availability
         should_display_availability => sub { _can_create_request(@_) },
+
+        # View and manage a request
+        illview => sub { illview(@_); }
     };
     return $capabilities->{$name};
 }
@@ -489,7 +492,7 @@ sub edititem {
                     DELETE FROM illrequestattributes WHERE illrequest_id=?
                 |, undef, $request->id);
                 # Insert all current attributes for this request
-                foreach my $attr(%{$request_details}) {
+                foreach my $attr( keys %{$request_details}) {
                     my $value = $request_details->{$attr};
                     if ($value && length $value > 0){
                         my @bind = ($request->id, $attr, $value, 0);
@@ -758,6 +761,20 @@ sub migrate {
     }
 }
 
+=head3 illview
+
+   View and manage an ILL request
+
+=cut
+
+sub illview {
+    my ($self, $params) = @_;
+
+    return {
+        method         => "illview"
+    };
+}
+
 ## Helpers
 
 =head3 _get_requested_partners
@@ -887,7 +904,7 @@ sub _get_request_details {
         %$custom
     };
     my $core = _get_core_fields();
-    foreach my $key(%{$core}) {
+    foreach my $key( keys %{$core}) {
         $return->{$key} = $params->{other}->{$key};
     }
 
