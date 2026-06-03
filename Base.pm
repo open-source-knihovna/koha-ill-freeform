@@ -702,7 +702,7 @@ sub migrate {
         $new_request->store;
 
         my @default_attributes = (
-            qw/title type author year volume isbn issn article_title article_author pages/
+            qw/title type author year volume isbn issn article_title article_author pages narrator players age/
         );
         my $original_attributes =
           $original_request->illrequestattributes->search(
@@ -913,6 +913,7 @@ Return a hashref of core fields
 
 sub _get_core_fields {
     return {
+        age              =>  'Věk',
         article_author   =>  'Article author',
         article_title    =>  'Article title',
         associated_id    =>  'Associated ID',
@@ -927,11 +928,13 @@ sub _get_core_fields {
         issn             =>  'ISSN',
         issue            =>  'Issue',
         item_date        =>  'Date',
+        narrator         =>  'Interpret / Načetl',
         pages            =>  'Pages',
         pagination       =>  'Pagination',
         paper_author     =>  'Paper author',
         paper_title      =>  'Paper title',
         part_edition     =>  'Part / Edition',
+        players          =>  'Počet hráčů',
         publication      =>  'Publication',
         published_date   =>  'Publication date',
         published_place  =>  'Place of publication',
@@ -1068,8 +1071,10 @@ record and return its ID
 sub _freeform2biblio {
     my ( $self, $metadata ) = @_;
 
-    # We only want to create biblios for books
-    return 0 unless $metadata->{type} eq 'book';
+    # We only want to create biblios for books, audiobooks, and board games
+    return 0 unless $metadata->{type} eq 'book'
+        || $metadata->{type} eq 'audiobook'
+        || $metadata->{type} eq 'boardgame';
 
     # We're going to try and populate author, title & ISBN
     my $author = $metadata->{author} if $metadata->{author};
@@ -1096,6 +1101,12 @@ sub _freeform2biblio {
     if ($title) {
         my $marc_title = MARC::Field->new( '245', '0', '0', a => $title );
         $record->append_fields($marc_title);
+    }
+
+    # Add narrator for audiobooks (MARC 700 - Added Entry - Personal Name)
+    if ($metadata->{type} eq 'audiobook' && $metadata->{narrator}) {
+        my $marc_narrator = MARC::Field->new( '700', '1', '', a => $metadata->{narrator}, e => 'narrator' );
+        $record->append_fields($marc_narrator);
     }
 
     # Suppress the record

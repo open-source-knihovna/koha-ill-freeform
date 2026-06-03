@@ -27,10 +27,20 @@
           [% ELSE %]
           <option value="book">Kniha</option>
           [% END %]
+          [% IF whole.value.other.type.lower == "audiobook" %]
+          <option value="audiobook" selected="selected">Audiokniha</option>
+          [% ELSE %]
+          <option value="audiobook">Audiokniha</option>
+          [% END %]
+          [% IF whole.value.other.type.lower == "boardgame" %]
+          <option value="boardgame" selected="selected">Desková hra</option>
+          [% ELSE %]
+          <option value="boardgame">Desková hra</option>
+          [% END %]
           [% IF whole.value.other.type.lower == "chapter" %]
           <option value="chapter" selected="selected">Kapitola</option>
           [% ELSE %]
-          <option value="chapter">Chapter</option>
+          <option value="chapter">Kapitola</option>
           [% END %]
           [% IF whole.value.other.type.lower == "journal" %]
           <option value="journal" selected="selected">Periodikum</option>
