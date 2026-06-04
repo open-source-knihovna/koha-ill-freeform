@@ -37,6 +37,11 @@
           [% ELSE %]
           <option value="boardgame">Desková hra</option>
           [% END %]
+          [% IF whole.value.other.type.lower == "musiccd" %]
+          <option value="musiccd" selected="selected">Hudební CD</option>
+          [% ELSE %]
+          <option value="musiccd">Hudební CD</option>
+          [% END %]
           [% IF whole.value.other.type.lower == "chapter" %]
           <option value="chapter" selected="selected">Kapitola</option>
           [% ELSE %]

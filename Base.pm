@@ -702,7 +702,7 @@ sub migrate {
         $new_request->store;
 
         my @default_attributes = (
-            qw/title type author year volume isbn issn article_title article_author pages narrator players age/
+            qw/title type author year volume isbn issn article_title article_author pages narrator players age performer/
         );
         my $original_attributes =
           $original_request->illrequestattributes->search(
@@ -934,6 +934,7 @@ sub _get_core_fields {
         paper_author     =>  'Paper author',
         paper_title      =>  'Paper title',
         part_edition     =>  'Part / Edition',
+        performer        =>  'Interpret',
         players          =>  'Počet hráčů',
         publication      =>  'Publication',
         published_date   =>  'Publication date',
@@ -1071,10 +1072,11 @@ record and return its ID
 sub _freeform2biblio {
     my ( $self, $metadata ) = @_;
 
-    # We only want to create biblios for books, audiobooks, and board games
+    # We only want to create biblios for books, audiobooks, board games, and music CDs
     return 0 unless $metadata->{type} eq 'book'
         || $metadata->{type} eq 'audiobook'
-        || $metadata->{type} eq 'boardgame';
+        || $metadata->{type} eq 'boardgame'
+        || $metadata->{type} eq 'musiccd';
 
     # We're going to try and populate author, title & ISBN
     my $author = $metadata->{author} if $metadata->{author};
@@ -1107,6 +1109,12 @@ sub _freeform2biblio {
     if ($metadata->{type} eq 'audiobook' && $metadata->{narrator}) {
         my $marc_narrator = MARC::Field->new( '700', '1', '', a => $metadata->{narrator}, e => 'narrator' );
         $record->append_fields($marc_narrator);
+    }
+
+    # Add performer for music CDs (MARC 700 - Added Entry - Personal Name)
+    if ($metadata->{type} eq 'musiccd' && $metadata->{performer}) {
+        my $marc_performer = MARC::Field->new( '700', '1', '', a => $metadata->{performer}, e => 'performer' );
+        $record->append_fields($marc_performer);
     }
 
     # Suppress the record
